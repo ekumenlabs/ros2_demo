@@ -24,6 +24,7 @@ function(custom_executable target)
     "rclcpp${target_suffix}"
     "std_msgs"
     "geometry_msgs"
+    "sensor_msgs"
     "example_interfaces")
   install(TARGETS ${target}${target_suffix}
     DESTINATION bin)
@@ -36,6 +37,7 @@ macro(targets)
 
   custom_executable(driver)
   custom_executable(please_move)
+  custom_executable(test_sub)
 endmacro()
 
 call_for_each_rmw_implementation(targets GENERATE_DEFAULT)
