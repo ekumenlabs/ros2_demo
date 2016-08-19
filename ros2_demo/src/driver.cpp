@@ -25,10 +25,10 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
   // This will create a node in the Domain 2
-  auto node = rclcpp::node::Node::make_shared("mover#2");
+  auto node = rclcpp::node::Node::make_shared("driver#2");
 
   auto sub = node->create_subscription<std_msgs::msg::String>(
-    "move_please", chatterCallback, rmw_qos_profile_default);
+    "please_move", chatterCallback, rmw_qos_profile_default);
   cmdpub = node->create_publisher<geometry_msgs::msg::Twist>(
     "cmd_vel", rmw_qos_profile_default);
 

@@ -6,7 +6,7 @@ int main(int argc, char * argv[])
   rclcpp::init(argc, argv);
 
   auto node_domain_2 = rclcpp::node::Node::make_shared("please_move#2");
-  auto pub_2 = node_domain_2->create_publisher<std_msgs::msg::String>("move_please", rmw_qos_profile_default);
+  auto pub_2 = node_domain_2->create_publisher<std_msgs::msg::String>("please_move", rmw_qos_profile_default);
 
   rclcpp::WallRate loop_rate(2);
 

@@ -34,7 +34,7 @@ macro(targets)
     get_rclcpp_information("${rmw_implementation}" "rclcpp${target_suffix}")
   endif()
 
-  custom_executable(mover)
+  custom_executable(driver)
   custom_executable(please_move)
 endmacro()
 
