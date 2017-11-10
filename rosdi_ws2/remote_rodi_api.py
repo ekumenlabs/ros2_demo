@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from http.client import HTTPConnection
-
+import json
 
 class RemoteRodiAPI(object):
 
@@ -11,7 +11,7 @@ class RemoteRodiAPI(object):
         
     def connect(self):
         try:
-            self.conn = HTTPConnection(self.hostname, port=self.port)
+            self.conn = HTTPConnection(self.hostname, port=self.port, timeout=100)
         except Exception as e:
             print("the HTTP request failed: " + str(e))
             return 0
@@ -45,7 +45,7 @@ class RemoteRodiAPI(object):
         self.move(0, 0)
 
     def see(self):
-        return self._send_command(5)
+        return int(self._send_command(5).decode())
 
     def sing(self, note, duration):
         self._send_command(4, note, duration)
@@ -54,8 +54,20 @@ class RemoteRodiAPI(object):
         self._send_command(6, red, green, blue)
 
     def sense_light(self):
-        return  self._send_command(7)
-        
+        return int(self._send_command(7).decode())
+
+    def sense_ground(self):
+        return json.loads(self._send_command(2).decode())
+    
+    def turn_on(self):
+        self._set_led(1)
+
+    def turn_off(self):
+        self._set_led(0)
+
+    def _set_led(self, state):
+        self._send_command(8,state)
+
     def _send_command(self, *args):
         request = "/" + "/".join(map(str, args))
 
