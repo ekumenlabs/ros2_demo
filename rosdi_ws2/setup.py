@@ -1,18 +1,33 @@
 from setuptools import setup
 
+package_name = 'rosdi_ws2'
+
 setup(
-    name='rosdi_ws2',
+    name=package_name,
     version='0.0.0',
     packages=[],
-    py_modules=['rosdi_ws', 'remote_rodi_api'],
+    py_modules=[
+        'rosdi_ws',
+        'remote_rodi_api'],
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+    ],
     install_requires=['setuptools'],
     author='Jon Lucas',
     author_email='jonlucas@ekuthon.com',
     maintainer='Jon Lucas',
     maintainer_email='jonlucas@ekuthon.com',
     keywords=['ROS'],
+    classifiers=[
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License 2.0',
+        'Programming Language :: Python',
+        'Topic :: Software Development',
+    ],
     description='RosDI interface.',
-    license='BSD',
+    license='Apache License 2.0',
     test_suite='test',
     entry_points={
         'console_scripts': [
