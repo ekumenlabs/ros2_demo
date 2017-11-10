@@ -19,9 +19,9 @@ from rclpy.qos import qos_profile_default
 
 from geometry_msgs.msg import Twist
 
-import transport
-
-transport = transport.Transport()
+from remote_rodi_api import RemoteRodiAPI 
+import time
+api = RemoteRodiAPI()
 
 
 def chatter_callback(msg):
@@ -55,17 +55,18 @@ def main(args=None):
     if args is None:
         args = sys.argv
 
-    rclpy.init(args)
-
+    rclpy.init()
+    api.connect()
     node = rclpy.create_node('rosdi_ws')
 
-    sub = node.create_subscription(Twist, 'cmd_vel', chatter_callback, qos_profile_default)
+    sub = node.create_subscription(Twist, 'cmd_vel', chatter_callback)
     assert sub  # prevent unused warning
-
-    transport.stop()
+    
     print('rosdi_ws ready.')
     while rclpy.ok():
-        rclpy.spin_once(node)
+        print(api.see())
+        time.sleep(0.5)
+        #rclpy.spin_once(node)
 
 if __name__ == '__main__':
     main()

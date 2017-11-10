@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>rosdi_ws</name>
+  <name>rosdi_ws2</name>
   <version>0.0.0</version>
   <description>Ros2 interface for rodi.</description>
   <maintainer email="jonlucas@ekuthon.com">Jon Lucas</maintainer>
