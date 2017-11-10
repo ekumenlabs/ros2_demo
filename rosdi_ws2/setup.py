@@ -8,7 +8,8 @@ setup(
     packages=[],
     py_modules=[
         'rosdi_ws',
-        'remote_rodi_api'],
+        'remote_rodi_api',
+        'rodi_node'],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),

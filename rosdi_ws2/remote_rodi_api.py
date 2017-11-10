@@ -8,24 +8,24 @@ class RemoteRodiAPI(object):
     def __init__(self):
         self.hostname = '192.168.4.1'
         self.port = '1234'
-        
+
     def connect(self):
         try:
             self.conn = HTTPConnection(self.hostname, port=self.port, timeout=100)
         except Exception as e:
             print("the HTTP request failed: " + str(e))
             return 0
-    
+
     def disconnect(self):
         try:
             self.conn.close()
         except Exception as e:
             print("the HTTP request failed: " + str(e))
             return 0
-    
+
     def blink(self, rate):
         self._send_command(1, rate)
-        
+
     def move(self, left_speed, right_speed):
         self._send_command(3, left_speed, right_speed)
 
@@ -49,7 +49,7 @@ class RemoteRodiAPI(object):
 
     def sing(self, note, duration):
         self._send_command(4, note, duration)
- 
+
     def set_pixel(self, red, green, blue):
         self._send_command(6, red, green, blue)
 
@@ -58,7 +58,7 @@ class RemoteRodiAPI(object):
 
     def sense_ground(self):
         return json.loads(self._send_command(2).decode())
-    
+
     def turn_on(self):
         self._set_led(1)
 
@@ -78,4 +78,3 @@ class RemoteRodiAPI(object):
         except Exception as e:
             print("the HTTP request failed: " + str(e))
             return 0
-            

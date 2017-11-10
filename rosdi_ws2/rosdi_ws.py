@@ -12,61 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-
 import rclpy
-from rclpy.qos import qos_profile_default
 
-from geometry_msgs.msg import Twist
-
-from remote_rodi_api import RemoteRodiAPI 
-import time
-api = RemoteRodiAPI()
-
-
-def chatter_callback(msg):
-    if msg.angular.z == 0 and msg.linear.x == 0:
-        transport.stop()
-        print('Stopping')
-        return
-
-    if msg.linear.x > 0:
-        transport.move_forward()
-        print('Forward')
-        return
-
-    if msg.linear.x < 0:
-        transport.move_reverse()
-        print('Reverse')
-        return
-
-    if msg.angular.z > 0:
-        transport.move_left()
-        print('Left')
-        return
-
-    if msg.angular.z < 0:
-        transport.move_right()
-        print('Right')
-        return
-
+from rodi_node import RODINode
 
 def main(args=None):
-    if args is None:
-        args = sys.argv
+    rclpy.init(args=args)
 
-    rclpy.init()
-    api.connect()
-    node = rclpy.create_node('rosdi_ws')
-
-    sub = node.create_subscription(Twist, 'cmd_vel', chatter_callback)
-    assert sub  # prevent unused warning
-    
-    print('rosdi_ws ready.')
-    while rclpy.ok():
-        print(api.see())
-        time.sleep(0.5)
-        #rclpy.spin_once(node)
+    rodi_node = RODINode()
+    rodi_node.start_polling(rclpy)
 
 if __name__ == '__main__':
     main()
