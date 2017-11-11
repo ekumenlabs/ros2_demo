@@ -22,7 +22,7 @@ class ObstaclesAvoiderNode(rclpy.Node):
 
     def _on_ultrasonic_data(self, msg):
         cmd_vel = Twist()
-        if msg.range < 20.0:
+        if msg.range < 0.2:
             cmd_vel.linear.x = 0.0
             cmd_vel.angular.z = 1.0
         else:
