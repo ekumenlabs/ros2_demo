@@ -72,10 +72,10 @@ class RemoteRodiAPI(object):
         self._send_command(state)
 
     def _send_command(self, *args, packet = 0, expectingBytes = 1):
-        bytes = map(lambda byte:byte.to_bytes(1, byteorder='big'), args)
+        bytes = map(lambda byte:byte.to_bytes(1, byteorder='big', signed=True), args)
         self._send_bytes(bytes)
         if packet != 0 :
-            return list(map(lambda byte:int.from_bytes(byte, byteorder='big', signed=True), self._recive_bytes(packet, expectingBytes)))
+            return list(map(lambda byte:int.from_bytes(byte, byteorder='big'), self._recive_bytes(packet, expectingBytes)))
 
     def _send_bytes(self, bytes):
         for byte in bytes:
