@@ -20,7 +20,7 @@ from socket_rodi_transport import SocketRoDITransport
 def main(args=None):
     rclpy.init(args=args)
 
-    rodi_node = RoDINode(HttpRoDITransport)
+    rodi_node = RoDINode(SocketRoDITransport)
     rodi_node.start_polling(rclpy)
 
 if __name__ == '__main__':
