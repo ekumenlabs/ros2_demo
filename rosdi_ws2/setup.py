@@ -17,6 +17,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['examples/obstacles_avoider_launcher.py']),
     ],
     install_requires=['setuptools'],
     author='Jon Lucas',
@@ -37,6 +38,7 @@ setup(
         'console_scripts': [
             'rosdi_ws = rosdi_ws:main',
             'obstacles_avoider = examples.obstacles_avoider:main',
+            'launch = examples.obstacles_avoider_launcher:main',
         ],
     },
 )

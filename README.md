@@ -44,3 +44,21 @@ Ekuthon multirobot ros2_demo
     ros2 topic pub  /cmd_vel geometry_msgs/Twist '{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.0}}'
     ```
     Congrats! Your RoDI should start rotation anti-clockwise.
+
+
+## Testing obstacles avoider demo
+
+1. Source the workspace
+
+    ```
+    cd ~/rodi_ros2_ws
+    source install/setup.bash
+    ```
+
+2. Launch the obstacles avoider launchfile
+
+    ```
+    launch `ros2 pkg prefix rosdi_ws2`/share/rosdi_ws2/launch/obstacles_avoider_launcher.py
+    ```
+
+    Your RoDI should go in a straight line and rotate if there's an obstacle at 0.2 or less from it.
