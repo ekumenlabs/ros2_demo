@@ -1,3 +1,4 @@
+import sys
 import rclpy
 import time
 import math
@@ -13,7 +14,7 @@ from overridable_action import OverridableAction
 class RoDINode(rclpy.Node):
 
 
-    def __init__(self):
+    def __init__(self, debug=True):
         super().__init__('rodi_node')
         self._ultrasound_publisher = self.create_publisher(Range, 'ultrasound')
         self._illuminance_publisher = self.create_publisher(Illuminance, 'illuminance')
@@ -21,18 +22,22 @@ class RoDINode(rclpy.Node):
         self._api = RemoteRodiAPI()
         self._actions = []
         self._timeout = 1000
+        self._debug = debug
 
     def start_polling(self, runner):
         self._api.connect()
         self._setup_subscribers()
 
-        self._last_update = int(round(time.time() * 1000))
 
         while runner.ok():
+            loop_start = time.time()
             self._poll_sensors()
-            runner.spin_once(self, timeout_sec=0.05)
+            runner.spin_once(self, timeout_sec=0.1)
             for action in self._actions:
                 action.verify_override()
+            loop_end = time.time()
+            if self._debug:
+                print('Loop time: %d ms' % int((loop_end - loop_start) * 1000))
 
     def _setup_subscribers(self):
         self._actions.append(OverridableAction(
@@ -86,9 +91,14 @@ class RoDINode(rclpy.Node):
             self._api.move(left, right)
 
     def _poll_sensors(self):
+        sense_start = time.time()
         self._poll_ultrasound_sensor()
         self._poll_illuminance_sensor()
         self._poll_ground_reflectance_sensor()
+        sense_end = time.time()
+        if self._debug:
+            print('Sense time: %d ms' % int((sense_end - sense_start) * 1000))
+
 
     def _poll_ultrasound_sensor(self):
         sensed_value = self._api.see()
