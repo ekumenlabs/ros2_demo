@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools import find_packages
 
 package_name = 'rosdi_ws2'
 
@@ -9,7 +10,8 @@ setup(
     py_modules=[
         'rosdi_ws',
         'remote_rodi_api',
-        'rodi_node'],
+        'rodi_node',
+        'examples/obstacles_avoider'],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -33,6 +35,7 @@ setup(
     entry_points={
         'console_scripts': [
             'rosdi_ws = rosdi_ws:main',
+            'obstacles_avoider = examples.obstacles_avoider:main',
         ],
     },
 )

@@ -7,10 +7,11 @@
   <maintainer email="jonlucas@ekuthon.com">Jon Lucas</maintainer>
   <license>Apache License 2.0</license>
 
+  <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rodi_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
 
   <!-- These test dependencies are optional
   Their purpose is to make sure that the code passes the linters -->
