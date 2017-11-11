@@ -4,18 +4,23 @@ import math
 
 from remote_rodi_api import RemoteRodiAPI
 
+from std_msgs.msg import UInt16, Bool, ColorRGBA
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Range, Illuminance
-from rodi_msgs.msg import GroundReflectance
+from rodi_msgs.msg import GroundReflectance, Buzzer
+from overridable_action import OverridableAction
 
-class RODINode(rclpy.Node):
+class RoDINode(rclpy.Node):
+
 
     def __init__(self):
-        super().__init__('RODINode')
+        super().__init__('rodi_node')
         self._ultrasound_publisher = self.create_publisher(Range, 'ultrasound')
         self._illuminance_publisher = self.create_publisher(Illuminance, 'illuminance')
         self._ground_reflectance_publisher = self.create_publisher(GroundReflectance, 'ground_reflectance')
         self._api = RemoteRodiAPI()
+        self._actions = []
+        self._timeout = 1000
 
     def start_polling(self, runner):
         self._api.connect()
@@ -26,21 +31,48 @@ class RODINode(rclpy.Node):
         while runner.ok():
             self._poll_sensors()
             runner.spin_once(self, timeout_sec=0.05)
-            self._reset_rodi_state_on_timeout()
+            for action in self._actions:
+                action.verify_override()
 
     def _setup_subscribers(self):
-        self.cmd_vel_subscription = self.create_subscription(
-            Twist,
+        self._actions.append(OverridableAction(
+            self,
             'cmd_vel',
-            self._on_cmd_vel_update)
-        assert self.cmd_vel_subscription
+            Twist,
+            self._on_cmd_vel_update,
+            self._timeout,
+            lambda : self._api.stop()))
 
-    def _reset_rodi_state_on_timeout(self):
-        if (self._last_update < int(round(time.time() * 1000)) - 1000):
-            self._api.stop()
+        self._actions.append(OverridableAction(
+            self,
+            'blink',
+            UInt16,
+            lambda msg: self._api.blink(msg.data),
+            self._timeout,
+            lambda : self._api.blink(0)))
+
+        self._actions.append(OverridableAction(
+            self,
+            'led',
+            Bool,
+            lambda msg: self._api.turn_on() if bool(msg.data) else self._api.turn_off(),
+            self._timeout,
+            lambda : self._api.turn_off()))
+
+        self._actions.append(OverridableAction(
+            self,
+            'pixel',
+            ColorRGBA,
+            lambda msg: self._api.set_pixel(int(msg.r), int(msg.g), int(msg.b)),
+            self._timeout,
+            lambda : self._api.set_pixel(0, 0, 0)))
+
+        self.create_subscription(
+            Buzzer,
+            'buzzer',
+            lambda msg: self._api.sing(msg.tone, msg.duration))
 
     def _on_cmd_vel_update(self, msg):
-        self._last_update = int(round(time.time() * 1000))
         # TODO: Implement this properly
         if msg.angular.z == 0 and msg.linear.x == 0:
             self._api.stop()
@@ -59,7 +91,7 @@ class RODINode(rclpy.Node):
         self._poll_ground_reflectance_sensor()
 
     def _poll_ultrasound_sensor(self):
-        sensed_value = float(self._api.see())
+        sensed_value = self._api.see()
 
         range_message = Range()
         range_message.radiation_type = 0  # ULTRASOUND
@@ -67,7 +99,7 @@ class RODINode(rclpy.Node):
         range_message.field_of_view = 0.52
         range_message.min_range = 0.2
         range_message.max_range = 1.0
-        range_message.range = sensed_value
+        range_message.range = sensed_value / 100.0
 
         self._ultrasound_publisher.publish(range_message)
 

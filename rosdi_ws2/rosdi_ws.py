@@ -14,12 +14,12 @@
 
 import rclpy
 
-from rodi_node import RODINode
+from rodi_node import RoDINode
 
 def main(args=None):
     rclpy.init(args=args)
 
-    rodi_node = RODINode()
+    rodi_node = RoDINode()
     rodi_node.start_polling(rclpy)
 
 if __name__ == '__main__':

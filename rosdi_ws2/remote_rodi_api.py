@@ -44,8 +44,11 @@ class RemoteRodiAPI(object):
     def stop(self):
         self.move(0, 0)
 
-    def see(self):
-        return int(self._send_command(5).decode())
+    def turn_on(self):
+        self._set_led(1)
+
+    def turn_off(self):
+        self._set_led(0)
 
     def sing(self, note, duration):
         self._send_command(4, note, duration)
@@ -53,17 +56,14 @@ class RemoteRodiAPI(object):
     def set_pixel(self, red, green, blue):
         self._send_command(6, red, green, blue)
 
+    def see(self):
+        return int(self._send_command(5).decode())
+
     def sense_light(self):
         return int(self._send_command(7).decode())
 
     def sense_ground(self):
         return json.loads(self._send_command(2).decode())
-
-    def turn_on(self):
-        self._set_led(1)
-
-    def turn_off(self):
-        self._set_led(0)
 
     def _set_led(self, state):
         self._send_command(8,state)

@@ -11,7 +11,8 @@ setup(
         'rosdi_ws',
         'remote_rodi_api',
         'rodi_node',
-        'examples/obstacles_avoider'],
+        'examples/obstacles_avoider',
+        'overridable_action'],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
