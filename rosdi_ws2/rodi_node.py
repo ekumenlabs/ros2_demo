@@ -73,17 +73,17 @@ class RoDINode(rclpy.Node):
             lambda msg: self._api.sing(msg.tone, msg.duration))
 
     def _on_cmd_vel_update(self, msg):
-        # TODO: Implement this properly
         if msg.angular.z == 0 and msg.linear.x == 0:
             self._api.stop()
-        elif msg.linear.x > 0:
-            self._api.move_forward()
-        elif msg.linear.x < 0:
-            self._api.move_reverse()
-        elif msg.angular.z > 0:
-            self._api.move_left()
-        elif msg.angular.z < 0:
-            self._api.move_right()
+        else:
+            # Very rough approximation: max RoDI speed is 20cm/seg
+            linear = max(min(msg.linear.x * 500, 100), -100)
+            # Very rough approximation to work with ROSJava teleop
+            angular = max(min(math.degrees(msg.angular.z) * 2, 100), -100)
+
+            left = int((linear - angular) / 2.0)
+            right = int((linear + angular) / 2.0)
+            self._api.move(left, right)
 
     def _poll_sensors(self):
         self._poll_ultrasound_sensor()
