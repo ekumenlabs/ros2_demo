@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import rclpy
-
 from rodi_node import RoDINode
 
 def main(args=None):
