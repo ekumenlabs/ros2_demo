@@ -75,7 +75,7 @@ class RemoteRodiAPI(object):
         bytes = map(lambda byte:byte.to_bytes(1, byteorder='big'), args)
         self._send_bytes(bytes)
         if packet != 0 :
-            return list(map(lambda byte:int.from_bytes(byte, byteorder='big', signed=False), self._recive_bytes(packet, expectingBytes)))
+            return list(map(lambda byte:int.from_bytes(byte, byteorder='big', signed=True), self._recive_bytes(packet, expectingBytes)))
 
     def _send_bytes(self, bytes):
         for byte in bytes:
@@ -91,4 +91,3 @@ class RemoteRodiAPI(object):
                 raise Exception('Connection fail')
             bytes.append(byte)
         return bytes
-
