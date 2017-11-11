@@ -8,11 +8,15 @@ setup(
     version='0.0.0',
     packages=[],
     py_modules=[
+        'rodi_transport',
+        'http_rodi_transport',
+        'socket_rodi_transport',
         'rosdi_ws',
-        'remote_rodi_api',
+        'rodi_api',
         'rodi_node',
         'examples/obstacles_avoider',
-        'overridable_action'],
+        'overridable_action',
+        ],
     data_files=[
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['examples/obstacles_avoider_launcher.py']),

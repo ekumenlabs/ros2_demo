@@ -3,7 +3,7 @@ import rclpy
 import time
 import math
 
-from remote_rodi_api import RemoteRodiAPI
+from rodi_api import RodiAPI
 
 from std_msgs.msg import UInt16, Bool, ColorRGBA
 from geometry_msgs.msg import Twist
@@ -14,12 +14,12 @@ from overridable_action import OverridableAction
 class RoDINode(rclpy.Node):
 
 
-    def __init__(self, debug=True):
+    def __init__(self, transport_class, debug=True):
         super().__init__('rodi_node')
         self._ultrasound_publisher = self.create_publisher(Range, 'ultrasound')
         self._illuminance_publisher = self.create_publisher(Illuminance, 'illuminance')
         self._ground_reflectance_publisher = self.create_publisher(GroundReflectance, 'ground_reflectance')
-        self._api = RemoteRodiAPI()
+        self._api = RodiAPI(transport_class)
         self._actions = []
         self._timeout = 1000
         self._debug = debug
