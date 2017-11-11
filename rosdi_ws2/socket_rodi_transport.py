@@ -5,7 +5,6 @@ from rodi_transport import RoDITransport
 class SocketRoDITransport(RoDITransport):
 
     def connect(self):
-        print(self.hostname, self.port)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.hostname, self.port))
 
@@ -13,8 +12,7 @@ class SocketRoDITransport(RoDITransport):
         self.socket.close()
 
     def send_command(self, parameters, expected_numbers, bytes_per_number):
-        #print(parameters, expected_numbers, bytes_per_number)
-        bytes = map(lambda byte: byte.to_bytes(1, byteorder='big', signed=True), parameters)
+        bytes = map(lambda byte: byte.to_bytes(2, byteorder='big', signed=True), parameters)
         self._send_bytes(bytes)
         if expected_numbers != 0 :
             response = self._recive_bytes(expected_numbers, bytes_per_number)

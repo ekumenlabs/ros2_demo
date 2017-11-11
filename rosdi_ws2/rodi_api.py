@@ -38,20 +38,11 @@ class RodiAPI(object):
     def turn_off(self):
         self._set_led(0)
 
-    # Not yet supported on both transports
-    # Implemented as no-ops
-
-    def blink(self, rate):
-        pass
-    #     self._send_command(1, rate)
-
     def sing(self, note, duration):
-        pass
-    #    self._send_command(4, note, duration)
+        self._send_command(4, note, duration)
 
     def set_pixel(self, red, green, blue):
-        pass
-    #    self._send_command(6, red, green, blue)
+        self._send_command(6, red, green, blue)
 
     def see(self):
         return self._send_command(5, expected_numbers=1, bytes_per_number=1)[0]
@@ -63,9 +54,7 @@ class RodiAPI(object):
         return self._send_command(2, expected_numbers=2, bytes_per_number=2)
 
     def _set_led(self, state):
-        pass
-    #    self._send_command(8, state)
+        self._send_command(8, state)
 
     def _send_command(self, *args, expected_numbers=0, bytes_per_number=1):
-        r = self._transport.send_command(args, expected_numbers, bytes_per_number)
-        return r
+        return self._transport.send_command(args, expected_numbers, bytes_per_number)
